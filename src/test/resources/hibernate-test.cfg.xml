@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- JDBC connection settings -->
+        <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
+        <property name="hibernate.connection.url">jdbc:sqlite:losPollosHermanosTestingOnly.db</property>
+        <property name="dialect">org.hibernate.community.dialect.SQLiteDialect</property>
+
+        <!-- Schema update -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Debugging -->
+        <property name="hibernate.show_sql">true</property> <!--can be cahnged to False-->
+        <property name="hibernate.format_sql">true</property> <!--can be changed to False-->
+        <property name="hibernate.generate_statistics">false</property>
+        <property name="hibernate.use_sql_comments">false</property>
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+
+        <!-- Additional compatibility settings -->
+        <property name="hibernate.bytecode.provider">none</property>
+        <property name="hibernate.enhance.enableLazyInitialization">false</property>
+        <property name="hibernate.enhance.enableDirtyTracking">false</property>
+        <property name="hibernate.enhance.enableAssociationManagement">false</property>
+
+        <!-- Force disable all bytecode enhancement -->
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.bytecode.provider">none</property>
+        <property name="hibernate.session.events.log">false</property>
+        <property name="hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS">0</property>
+
+        <!-- Register your entities -->
+        <mapping class="Models.DBModels.transport.Driver"/>
+        <mapping class="Models.DBModels.transport.Branch"/>
+        <mapping class="Models.DBModels.transport.DeliveryFileItem"/>
+        <mapping class="Models.DBModels.transport.DeliveryFile"/>
+        <mapping class="Models.DBModels.transport.APhysicalSite"/>
+        <mapping class="Models.DBModels.transport.TransportRoute"/>
+        <mapping class="Models.DBModels.transport.TransportArea"/>
+        <mapping class="Models.DBModels.transport.Truck"/>
+        <mapping class="Models.DBModels.transport.TransportIssueLog"/>
+        <mapping class="Models.DBModels.transport.Transport"/>
+        <mapping class="Models.DBModels.suppliers.Supplier"/>
+        <!-- Employees -->
+        <mapping class="Models.DBModels.Employees.Employee"/>
+        <mapping class="Models.DBModels.Employees.Shift"/>
+        <mapping class="Models.DBModels.Employees.Availability"/>
+        <mapping class="Models.DBModels.Employees.ARole"/>
+        <mapping class="Models.DBModels.Employees.Contract"/>
+        <mapping class="Models.DBModels.Employees.BankAccount"/>
+        <!-- Employee Roles -->
+        <mapping class="Domain.Employees.Cashier"/>
+        <mapping class="Domain.Employees.Shift_Manager"/>
+        <mapping class="Domain.Employees.HR_Lead"/>
+        <mapping class="Domain.Employees.Cleaner"/>
+        <mapping class="Domain.Employees.Security"/>
+        <mapping class="Domain.Employees.Stocker"/>
+        <mapping class="Domain.Employees.Driver"/>
+    </session-factory>
+</hibernate-configuration>
