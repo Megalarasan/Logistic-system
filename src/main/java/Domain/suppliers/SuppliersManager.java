@@ -19,6 +19,10 @@ public class SuppliersManager {
     private static final ISupplierController supplierController = DBManager.getInstance()
             .getSupplierController();
 
+    private static boolean isBlank(String value) {
+        return value == null || value.isBlank();
+    }
+
     public static ArrayList<Supplier> getSuppliers() {
         ArrayList<Supplier> suppliers = new ArrayList<>();
         for (Integer id : supplierController.getAllIds()) {
@@ -43,18 +47,32 @@ public class SuppliersManager {
     }
 
     public static boolean addSupplier(String name, String address, String phone) {
-        Supplier s = getSupplierByName(name);
+        if (isBlank(name) || isBlank(address) || isBlank(phone)) {
+            Helper.showError("Supplier name, address, and phone are required");
+            return false;
+        }
+
+        Supplier s = getSupplierByName(name.trim());
         if (s != null) {
             Helper.showError("Supplier with this name already exists");
+            return false;
         }
-        s = new Supplier(Helper.UndefinedId, name, address, phone);
+
+        s = new Supplier(Helper.UndefinedId, name.trim(), address.trim(), phone.trim());
         return supplierController.addSupplier(s) != Helper.UndefinedId;
     }
 
 
     public static List<ItemsAtSupplier> mockGetSupplierItemsByStockItems(int supplierId, List<StockItem> items) {
         List<ItemsAtSupplier> itemsAtSupplier = new ArrayList<>();
+        if (supplierId <= 0 || items == null || items.isEmpty()) {
+            return itemsAtSupplier;
+        }
+
         for (StockItem item : items) {
+            if (item == null) {
+                continue;
+            }
             ItemsAtSupplier itemsAtSupplier1 = new ItemsAtSupplier(supplierId, item.getStockItemId(), item.getAmount(),
                     item.getBarcode());
             itemsAtSupplier.add(itemsAtSupplier1);
@@ -71,8 +89,15 @@ public class SuppliersManager {
      */
     public static List<ItemsAtSupplier> mockCanSupplierProvideRequestedItems(int supplierId, List<StockItem> items) {
         List<ItemsAtSupplier> itemsAtSupplier = new ArrayList<>();
+        if (getSupplierById(supplierId) == null || items == null || items.isEmpty()) {
+            return itemsAtSupplier;
+        }
+
         Random random = new Random();
         for (StockItem item : items) {
+            if (item == null) {
+                continue;
+            }
             double originalAmount = item.getAmount();
             double randomAmount = originalAmount - 5 + (10 * random.nextDouble()); // Generate random value in range [amount - 5, amount + 5]
             randomAmount = Math.max(0, randomAmount);
@@ -94,7 +119,15 @@ public class SuppliersManager {
      * @return - true if the items were reserved successfully, false otherwise
      */
     public static boolean mockReserveItemsOfSupplier(int supplierId, List<ItemsAtSupplier> itemIds) {
-        //todo @ whoever
+        if (getSupplierById(supplierId) == null || itemIds == null || itemIds.isEmpty()) {
+            return false;
+        }
+
+        for (ItemsAtSupplier item : itemIds) {
+            if (item == null || item.getStockItemId() <= 0 || item.getAmount() <= 0) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -107,7 +140,15 @@ public class SuppliersManager {
      * @return - true if the items were un-reserved successfully, false otherwise
      */
     public static boolean mockUnReserveItemsOfSupplier(int supplierId, List<ItemsAtSupplier> itemIds) {
-        //todo @ whoever
+        if (getSupplierById(supplierId) == null || itemIds == null || itemIds.isEmpty()) {
+            return false;
+        }
+
+        for (ItemsAtSupplier item : itemIds) {
+            if (item == null || item.getStockItemId() <= 0 || item.getAmount() <= 0) {
+                return false;
+            }
+        }
         return true;
     }
 
