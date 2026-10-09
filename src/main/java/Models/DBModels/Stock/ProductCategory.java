@@ -1,12 +1,13 @@
 package Models.DBModels.Stock;
 
 public class ProductCategory {
-    private static int categoryID=0;
+    private static int nextCategoryId = 1;
+    private final int categoryID;
     private String name;
 
-    public ProductCategory( String name) {
-        this.categoryID++;
-        this.name = name;
+    public ProductCategory(String name) {
+        this.categoryID = nextCategoryId++;
+        setName(name);
     }
 
     public int getCategoryID() {
@@ -16,9 +17,11 @@ public class ProductCategory {
     public String getName() {
         return name;
     }
-    //@sean TODO add exeption handling
-    public void setName(String newName)
-    {
-        this.name = newName;
+
+    public void setName(String newName) {
+        if (newName == null || newName.isBlank()) {
+            throw new IllegalArgumentException("Product category name cannot be blank.");
+        }
+        this.name = newName.trim();
     }
 }
